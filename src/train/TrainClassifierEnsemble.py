@@ -53,7 +53,7 @@ def get_model(base_model,
               pretrained="imagenet"): 
     base = base_model(input_shape=input_shape,
                       include_top=False,
-                      weights=pretrained, 
+                      weights=None, 
                       channels="gray") 
     if pooling == "avg": 
         x = GlobalAveragePooling2D()(base.output) 
@@ -293,7 +293,7 @@ def load_and_validate(val_results_dict,
     # Memory requirements may prevent all validation data from being
     # loaded at once 
     # NOTE: data is NOT preprocessed
-    print ">>VALIDATING<<\n"
+    print(">>VALIDATING<<\n")
     X_val = np.asarray([np.load(os.path.join(data_dir, "{}.npy".format(_))) for _ in valid_df.patientId])
     if clahe:
         X_val = np.asarray([apply_clahe(_) for _ in X_val])
@@ -339,13 +339,13 @@ def train(df, fold,
     valid_df = df[(df.fold == fold)] 
     # Load the validation data if specified
     if load_validation_data: 
-        print "Loading validation data ..."
+        print("Loading validation data ...")
         X_val = np.asarray([np.load(os.path.join(data_dir, "{}.npy".format(_))) for _ in valid_df.patientId])
         if clahe: 
             X_val = np.asarray([apply_clahe(_) for _ in X_val])
         X_val = np.expand_dims(X_val, axis=-1)
         #X_val = preprocess_input(X_val, model_name)
-        print "DONE !" 
+        print("DONE !")
     valid_ids = np.asarray(list(valid_df["patientId"]))
     y_val = np.asarray(list(valid_df["label"]))
     valid_views = np.asarray(list(valid_df["view"]))
@@ -392,7 +392,7 @@ def train(df, fold,
         suffix = str(each_subepoch).zfill(3) 
         logs_path = os.path.join(save_logs_path, "log_subepoch_{}.csv".format(suffix))
         csvlogger = CSVLogger(logs_path) 
-        print "Loading training sample ..."
+        print("Loading training sample ...")
         if mode == "weighted_loss": 
             X_train, y_train, z = load_sample_and_labels(train_df, train_images, num_train_samples, z) 
             class_weight_dict = {} 
@@ -412,7 +412,7 @@ def train(df, fold,
         if clahe: 
             X_train = np.asarray([apply_clahe(_) for _ in X_train]) 
         X_train = np.expand_dims(X_train, axis=-1) 
-        print "Augmenting training data ..."
+        print("Augmenting training data ...")
         for index, each_image in enumerate(X_train):
             sys.stdout.write("{}/{} ...\r".format(index+1, len(X_train)))
             sys.stdout.flush() 
@@ -423,7 +423,7 @@ def train(df, fold,
             if np.random.binomial(1, augment_p): 
                 X_train[index] = data_augmentation(each_image) 
         X_train = preprocess_input(X_train, model_name) 
-        print ("\nDONE !")
+        print("\nDONE !")
         if mode == "weighted_loss": 
             model.fit(X_train, y_train, 
                   batch_size=batch_size, epochs=1,

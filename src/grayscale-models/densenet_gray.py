@@ -256,13 +256,13 @@ def DenseNet(blocks,
                     cache_subdir='models',
                     file_hash='7bb75edd58cb43163be7e0005fbe95ef')
         else:
-	    if channels == "gray": 
-            	if blocks == [6, 12, 24, 16]:
+            if channels == "gray": 
+                if blocks == [6, 12, 24, 16]:
                     weights_path = "/users/ipan/scratch/grayscale-models/weights/densenet121_gray.h5"
                 elif blocks == [6, 12, 32, 32]:
                     weights_path = "/users/ipan/scratch/grayscale-models/weights/densenet169_gray.h5"
                 elif blocks == [6, 12, 48, 32]:
-		    weights_path = "/users/ipan/scratch/grayscale-models/weights/densenet201_gray.h5"
+                    weights_path = "/users/ipan/scratch/grayscale-models/weights/densenet201_gray.h5"
         model.load_weights(weights_path)
     elif weights is not None:
         model.load_weights(weights)

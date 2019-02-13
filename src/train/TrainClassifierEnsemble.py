@@ -471,7 +471,7 @@ def train(df, fold,
 import json 
 
 # Specify GPU
-os.environ["CUDA_VISIBLE_DEVICES"] = '1'
+#os.environ["CUDA_VISIBLE_DEVICES"] = '1'
 
 with open(os.path.join(WDIR, "../../SETTINGS.json")) as f: 
     SETTINGS_JSON = json.load(f) 
@@ -488,7 +488,7 @@ fold_save_dir = os.path.join(WDIR, "../../models/classifiers/snapshots/binary/In
 model = get_model(InceptionResNetV2, 0, 5e-5, dropout=None, input_shape=(input_size,input_size,1),
     pretrained=os.path.join(WDIR, "../../models/pretrained/InceptionResNetV2_NIH15_Px256.h5"))
 model_name = "inception"
-train(df, fold, model, model_name, 15, 16, 5e-5, 0.5,
+train(df, fold, model, model_name, 15, 8, 5e-5, 0.5,
       os.path.join(fold_save_dir, "l0/weights/"),
       os.path.join(fold_save_dir, "l0/logs/"),
       os.path.join(fold_save_dir, "l0/val-results/"),
@@ -509,7 +509,7 @@ fold_save_dir = os.path.join(WDIR, "../../models/classifiers/snapshots/binary/In
 model = get_model(InceptionResNetV2, 0, 5e-5, dropout=None, input_shape=(input_size,input_size,1),
     pretrained=os.path.join(WDIR, "../../models/pretrained/InceptionResNetV2_NIH15_Px256.h5"))
 model_name = "inception"
-train(df, fold, model, model_name, 20, 16, 5e-5, 0.5,
+train(df, fold, model, model_name, 20, 8, 5e-5, 0.5,
       os.path.join(fold_save_dir, "l0/weights/"),
       os.path.join(fold_save_dir, "l0/logs/"),
       os.path.join(fold_save_dir, "l0/val-results/"),
@@ -530,7 +530,7 @@ fold_save_dir = os.path.join(WDIR, "../../models/classifiers/snapshots/binary/Xc
 model = get_model(Xception, 0, 5e-5, dropout=None, input_shape=(input_size,input_size,1),
     pretrained=os.path.join(WDIR, "../../models/pretrained/Xception_NIH15_Px320.h5"))
 model_name = "xception"
-train(df, fold, model, model_name, 20, 16, 5e-5, 0.5,
+train(df, fold, model, model_name, 20, 8, 5e-5, 0.5,
       os.path.join(fold_save_dir, "l0/weights/"),
       os.path.join(fold_save_dir, "l0/logs/"),
       os.path.join(fold_save_dir, "l0/val-results/"),
@@ -550,7 +550,7 @@ fold_save_dir = os.path.join(WDIR, "../../models/classifiers/snapshots/binary/Xc
 model = get_model(Xception, 0, 5e-5, dropout=None, input_shape=(input_size,input_size,1),
     pretrained=os.path.join(WDIR, "../../models/pretrained/Xception_NIH15_Px320.h5"))
 model_name = "xception"
-train(df, fold, model, model_name, 20, 8, 5e-5, 0.5,
+train(df, fold, model, model_name, 20, 4, 5e-5, 0.5,
       os.path.join(fold_save_dir, "l0/weights/"),
       os.path.join(fold_save_dir, "l0/logs/"),
       os.path.join(fold_save_dir, "l0/val-results/"),
@@ -570,21 +570,20 @@ fold_save_dir = os.path.join(WDIR, "../../models/classifiers/snapshots/binary/De
 model = get_model(DenseNet169, 0, 5e-5, dropout=None, input_shape=(input_size,input_size,1),
     pretrained=os.path.join(WDIR, "../../models/pretrained/DenseNet169_NIH15_Px448.h5"))
 model_name = "densenet"
-train(df, fold, model, model_name, 20, 8, 5e-5, 0.5,
+train(df, fold, model, model_name, 20, 4, 5e-5, 0.5,
       os.path.join(fold_save_dir, "l0/weights/"),
       os.path.join(fold_save_dir, "l0/logs/"),
       os.path.join(fold_save_dir, "l0/val-results/"),
       os.path.join(WDIR, "../../", SETTINGS_JSON["TRAIN_IMAGES_CLEAN_DIR"], "resized/i{}/".format(input_size)),
       mode="weighted_loss",
-      llr_schedule=[6,3,2.],
+      lr_schedule=[6,3,2.],
       validate_every_nth_epoch=2,
       load_validation_data=False,
       num_train_samples=8000)
 
 
 ###
-
-df = pd.read_csv(os.path.join(WDIR, "../..", SETTINGS_JSON["TRAIN_INFO_DIR"], "stage_1_stratified_folds_df.csv"))
+df = pd.read_csv(os.path.join(WDIR, "../..", SETTINGS_JSON["TRAIN_INFO_DIR"], "stratified_folds_df.csv"))
 df["label"] = None 
 df["label"][df["class"] == "Normal"] = 0 
 df["label"][df["class"] == "No Lung Opacity / Not Normal"] = 1
@@ -599,7 +598,7 @@ fold_save_dir = os.path.join(WDIR, "../../models/classifiers/snapshots/multiclas
 model = get_model(InceptionResNetV2, 0, 5e-5, classes=3, activation="softmax", dropout=None, input_shape=(input_size,input_size,1),
     pretrained=os.path.join(WDIR, "../../models/pretrained/InceptionResNetV2_NIH15_Px256.h5"))
 model_name = "inception"
-train(df, fold, model, model_name, 20, 16, 5e-5, 0.5,
+train(df, fold, model, model_name, 20, 8, 5e-5, 0.5,
       os.path.join(fold_save_dir, "l0/weights/"),
       os.path.join(fold_save_dir, "l0/logs/"),
       os.path.join(fold_save_dir, "l0/val-results/"),
@@ -620,7 +619,7 @@ fold_save_dir = os.path.join(WDIR, "../../models/classifiers/snapshots/multiclas
 model = get_model(InceptionResNetV2, 0, 5e-5, classes=3, activation="softmax", dropout=None, input_shape=(input_size,input_size,1),
     pretrained=os.path.join(WDIR, "../../models/pretrained/InceptionResNetV2_NIH15_Px256.h5"))
 model_name = "inception"
-train(df, fold, model, model_name, 20, 16, 5e-5, 0.5,
+train(df, fold, model, model_name, 20, 8, 5e-5, 0.5,
       os.path.join(fold_save_dir, "l0/weights/"),
       os.path.join(fold_save_dir, "l0/logs/"),
       os.path.join(fold_save_dir, "l0/val-results/"),
@@ -631,7 +630,6 @@ train(df, fold, model, model_name, 20, 16, 5e-5, 0.5,
       load_validation_data=False,
       num_train_samples=8000)
 
-
 ############
 # Xception #
 ############
@@ -641,7 +639,7 @@ fold_save_dir = os.path.join(WDIR, "../../models/classifiers/snapshots/multiclas
 model = get_model(Xception, 0, 5e-5, classes=3, activation="softmax", dropout=None, input_shape=(input_size,input_size,1),
     pretrained=os.path.join(WDIR, "../../models/pretrained/Xception_NIH15_Px320.h5"))
 model_name = "xception"
-train(df, fold, model, model_name, 20, 16, 5e-5, 0.5,
+train(df, fold, model, model_name, 20, 4, 5e-5, 0.5,
       os.path.join(fold_save_dir, "l0/weights/"),
       os.path.join(fold_save_dir, "l0/logs/"),
       os.path.join(fold_save_dir, "l0/val-results/"),
@@ -661,7 +659,7 @@ fold_save_dir = os.path.join(WDIR, "../../models/classifiers/snapshots/multiclas
 model = get_model(Xception, 0, 5e-5, classes=3, activation="softmax", dropout=None, input_shape=(input_size,input_size,1),
     pretrained=os.path.join(WDIR, "../../models/pretrained/Xception_NIH15_Px320.h5"))
 model_name = "xception"
-train(df, fold, model, model_name, 20, 8, 5e-5, 0.5,
+train(df, fold, model, model_name, 20, 2, 5e-5, 0.5,
       os.path.join(fold_save_dir, "l0/weights/"),
       os.path.join(fold_save_dir, "l0/logs/"),
       os.path.join(fold_save_dir, "l0/val-results/"),
@@ -681,7 +679,7 @@ fold_save_dir = os.path.join(WDIR, "../../models/classifiers/snapshots/multiclas
 model = get_model(DenseNet169, 0, 5e-5, classes=3, activation="softmax", dropout=None, input_shape=(input_size,input_size,1),
     pretrained=os.path.join(WDIR, "../../models/pretrained/DenseNet169_NIH15_Px448.h5"))
 model_name = "densenet"
-train(df, fold, model, model_name, 20, 8, 5e-5, 0.5,
+train(df, fold, model, model_name, 20, 2, 5e-5, 0.5,
       os.path.join(fold_save_dir, "l0/weights/"),
       os.path.join(fold_save_dir, "l0/logs/"),
       os.path.join(fold_save_dir, "l0/val-results/"),

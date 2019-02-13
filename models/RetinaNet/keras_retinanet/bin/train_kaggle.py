@@ -478,15 +478,15 @@ def main(args=None):
     # start training
     best_eval_metric = 0.
     for e in range(args.epochs):
-    	callbacks = create_callbacks(e, model, training_model, prediction_model, args, )
+        callbacks = create_callbacks(e, model, training_model, prediction_model, args, )
         training_model.fit_generator(
                 generator=train_generator,
                 steps_per_epoch=args.steps,
                 epochs=1,
                 verbose=1,
                 callbacks=callbacks,
-            )   
-    	model_save_path = os.path.join(args.snapshot_path,
+                )   
+        model_save_path = os.path.join(args.snapshot_path,
                                        '{}_{}_{}.h5'.format(args.backbone, 
                                                             args.dataset_type, 
                                                             str(e).zfill(2)))
